@@ -1,0 +1,210 @@
+{
+  "items": [
+    {
+      "asset_fit": "Machine Learning/AI, AR/VR, E-commerce/Retail",
+      "canonical_source_url": "https://youcam-api.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $6,000",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: Jul 06 - Aug 17, 2026. Listing says 3 days left.",
+      "opportunity_id": "discovered_cf4e180baedf700e727c",
+      "organizer": "Perfect Corp",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "YouCam API Skin AI & Apparel VTO Hackathon"
+    },
+    {
+      "asset_fit": "Beginner Friendly, Machine Learning/AI, Open Ended",
+      "canonical_source_url": "https://agentsforhumans.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $40,000",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: Aug 10 - Sep 14, 2026. Listing says about 1 month left.",
+      "opportunity_id": "discovered_8cfd06577920c282cdcc",
+      "organizer": "Amazon",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "Agents for Humans Hackathon"
+    },
+    {
+      "asset_fit": "Databases, Machine Learning/AI, Open Ended",
+      "canonical_source_url": "https://agentic-cinema.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $75,000",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: Jul 27 - Sep 09, 2026. Listing says 26 days left.",
+      "opportunity_id": "discovered_a56887b44ff9a6845843",
+      "organizer": "Google",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "Agentic Cinema: The Blockbuster Hackathon"
+    },
+    {
+      "asset_fit": "Enterprise, Machine Learning/AI, Productivity",
+      "canonical_source_url": "https://allthingsagentichackathon.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $180,000",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: Aug 04 - 31, 2026. Listing says 17 days left.",
+      "opportunity_id": "discovered_c80bd0e8d6a072083e49",
+      "organizer": "Google",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "All Things Agentic Hackathon"
+    },
+    {
+      "asset_fit": "Machine Learning/AI",
+      "canonical_source_url": "https://arm-ai-optimization-challenge.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $8,000",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: Jun 04 - Aug 14, 2026. Listing says about 5 hours left.",
+      "opportunity_id": "discovered_29d09b1f8e99f38e793a",
+      "organizer": "arm",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "Arm Create: AI Optimization Challenge"
+    },
+    {
+      "asset_fit": "Machine Learning/AI, Education, Productivity",
+      "canonical_source_url": "https://xprize.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $2,000,000",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: May 19 - Aug 17, 2026. Listing says 3 days left.",
+      "opportunity_id": "discovered_aaae3c980d15d2508d94",
+      "organizer": "XPRIZE",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "Build with Gemini XPRIZE"
+    },
+    {
+      "asset_fit": "Communication, Enterprise, Machine Learning/AI",
+      "canonical_source_url": "https://call-e.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $10,000",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: Jul 23 - Sep 14, 2026. Listing says about 1 month left.",
+      "opportunity_id": "discovered_885f38f63e2578717f26",
+      "organizer": "CALL-E",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "CALL-E: Your Code Is Calling"
+    },
+    {
+      "asset_fit": "Machine Learning/AI, Databases, DevOps",
+      "canonical_source_url": "https://cockroachdb-ai.devpost.com/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "DEVPOST_OFFICIAL_API",
+      "economic_mechanism": "Listed prize pool: $8,750",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": null,
+      "freshness_note": "Discovered from Devpost's official hackathon JSON API at 2026-08-14T17:54:29Z. Listing submission period: Jun 30 - Aug 18, 2026. Listing says 4 days left.",
+      "opportunity_id": "discovered_1b4e9dc4bf4cf42700f2",
+      "organizer": "Cockroach Labs",
+      "reason_codes": [
+        "PRIMARY_SOURCE_DEEP_VERIFICATION_PENDING",
+        "ELIGIBILITY_NOT_YET_VERIFIED"
+      ],
+      "title": "CockroachDB × AWS Hackathon - Build with Agentic Memory"
+    },
+    {
+      "asset_fit": "OPEN_SOURCE_SOFTWARE",
+      "canonical_source_url": "https://nlnet.nl/propose/",
+      "confidence": 0.82,
+      "decision": "WATCH",
+      "discovered_at": "2026-08-14T17:54:29Z",
+      "discovered_via": "NLNET_OFFICIAL_CALL_PAGE",
+      "economic_mechanism": "Official NLnet proposal form indicates requested support between €5,000 and €50,000.",
+      "eligibility": "UNKNOWN",
+      "estimated_effort_hours": null,
+      "external_deadline": "2026-11-03T10:00:00Z",
+      "freshness_note": "Discovered directly from NLnet's official proposal page at 2026-08-14T17:54:29Z.",
+      "opportunity_id": "discovered_d3216aab41990bf22f9d",
+      "organizer": "NLnet Foundation",
+      "reason_codes": [
+        "CALL_SCOPE_REQUIRES_DEEP_VERIFICATION",
+        "ELIGIBILITY_NOT_YET_VERIFIED",
+        "CALL_NOT_OPEN_YET"
+      ],
+      "title": "NLnet upcoming open-source grant calls"
+    }
+  ],
+  "raw_candidate_count": 10,
+  "reason_codes": [],
+  "scan_id": "live_discovery_b78a694dc2637e82",
+  "scanned_at": "2026-08-14T17:54:29Z",
+  "search_terms": [
+    "AI agents",
+    "automation",
+    "API"
+  ],
+  "shortlist_count": 9,
+  "source_results": [
+    {
+      "candidate_count": 8,
+      "source": "DEVPOST_OFFICIAL_API",
+      "status": "PASS",
+      "url": "https://devpost.com/api/hackathons"
+    },
+    {
+      "candidate_count": 1,
+      "source": "NLNET_OFFICIAL_CALL_PAGE",
+      "status": "PASS",
+      "url": "https://nlnet.nl/propose/"
+    }
+  ],
+  "status": "PASS"
+}
