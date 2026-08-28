@@ -70,6 +70,10 @@ AOO does not allow model output to directly authorize consequential external act
 
 ## Architecture
 
+![Autonomous Opportunity Operator architecture](docs/architecture.svg)
+
+The diagram shows the complete authority path: product intake, seven specialized Google ADK agents using Gemini 3.5 Flash, deterministic decision tools, authoritative Firestore state, idempotent replay, and the separation between the public judge-safe service and the protected proof runtime.
+
 ~~mermaid
 flowchart TD
     U["User goal, resources & limits"]

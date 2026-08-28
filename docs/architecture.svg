@@ -1,0 +1,805 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1600"
+  height="1050"
+  viewBox="0 0 1600 1050"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">
+    Autonomous Opportunity Operator architecture
+  </title>
+
+  <desc id="desc">
+    Architecture diagram showing the AOO product layer,
+    seven Google ADK agents using Gemini 3.5 Flash,
+    deterministic authority tools, Cloud Firestore state
+    and replay, Google Cloud Run deployment, and the
+    separation between the public judge-safe service
+    and protected proof runtime.
+  </desc>
+
+  <defs>
+    <linearGradient
+      id="bg"
+      x1="0"
+      y1="0"
+      x2="1"
+      y2="1"
+    >
+      <stop offset="0%" stop-color="#08111f"/>
+      <stop offset="100%" stop-color="#101d31"/>
+    </linearGradient>
+
+    <linearGradient
+      id="hero"
+      x1="0"
+      y1="0"
+      x2="1"
+      y2="0"
+    >
+      <stop offset="0%" stop-color="#17253b"/>
+      <stop offset="100%" stop-color="#1d3150"/>
+    </linearGradient>
+
+    <filter
+      id="shadow"
+      x="-20%"
+      y="-20%"
+      width="140%"
+      height="140%"
+    >
+      <feDropShadow
+        dx="0"
+        dy="8"
+        stdDeviation="10"
+        flood-opacity="0.24"
+      />
+    </filter>
+
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="8"
+      refY="5"
+      orient="auto"
+      markerUnits="strokeWidth"
+    >
+      <path
+        d="M 0 0 L 10 5 L 0 10 z"
+        fill="#87a8d8"
+      />
+    </marker>
+
+    <style>
+      .title {
+        font:
+          700 42px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        fill: #f7fbff;
+      }
+
+      .subtitle {
+        font:
+          400 20px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #a9bfdc;
+      }
+
+      .section {
+        font:
+          700 18px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #9fbce0;
+        letter-spacing: 1.5px;
+      }
+
+      .box-title {
+        font:
+          700 18px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #f7fbff;
+      }
+
+      .box-small {
+        font:
+          500 14px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #b7c9df;
+      }
+
+      .agent-num {
+        font:
+          700 14px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #91b9ff;
+      }
+
+      .agent-title {
+        font:
+          700 14px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #ffffff;
+      }
+
+      .agent-sub {
+        font:
+          400 11px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #a9bdd6;
+      }
+
+      .tool-title {
+        font:
+          700 13px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #dceeff;
+      }
+
+      .tool-sub {
+        font:
+          400 11px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #9cb3cf;
+      }
+
+      .badge {
+        font:
+          700 14px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #eaf4ff;
+      }
+
+      .tiny {
+        font:
+          500 12px
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: #8fa9ca;
+      }
+
+      .arrow {
+        stroke: #87a8d8;
+        stroke-width: 3;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+
+      .thin-arrow {
+        stroke: #6789b2;
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+
+      .dash {
+        stroke: #52749d;
+        stroke-width: 2;
+        stroke-dasharray: 8 8;
+        fill: none;
+      }
+    </style>
+  </defs>
+
+  <rect
+    x="0"
+    y="0"
+    width="1600"
+    height="1050"
+    fill="url(#bg)"
+  />
+
+  <text
+    x="80"
+    y="76"
+    class="title"
+  >
+    Autonomous Opportunity Operator
+  </text>
+
+  <text
+    x="80"
+    y="112"
+    class="subtitle"
+  >
+    Probabilistic intelligence investigates · deterministic authority decides · humans control consequential action
+  </text>
+
+  <rect
+    x="80"
+    y="145"
+    width="1440"
+    height="3"
+    rx="1.5"
+    fill="#294665"
+  />
+
+  <text
+    x="80"
+    y="190"
+    class="section"
+  >
+    01 · PRODUCT &amp; PERSONALIZATION
+  </text>
+
+  <rect
+    x="80"
+    y="215"
+    width="270"
+    height="105"
+    rx="18"
+    fill="url(#hero)"
+    stroke="#35577f"
+    filter="url(#shadow)"
+  />
+
+  <text
+    x="105"
+    y="252"
+    class="box-title"
+  >
+    User profile
+  </text>
+
+  <text
+    x="105"
+    y="280"
+    class="box-small"
+  >
+    goal · capital · time · jurisdiction
+  </text>
+
+  <text
+    x="105"
+    y="302"
+    class="box-small"
+  >
+    autonomy · willingness · constraints
+  </text>
+
+  <rect
+    x="455"
+    y="215"
+    width="340"
+    height="105"
+    rx="18"
+    fill="#142942"
+    stroke="#4d7ab0"
+    filter="url(#shadow)"
+  />
+
+  <text
+    x="480"
+    y="252"
+    class="box-title"
+  >
+    AOO Product UI
+  </text>
+
+  <text
+    x="480"
+    y="280"
+    class="box-small"
+  >
+    Opportunity Inbox + profile-first UX
+  </text>
+
+  <text
+    x="480"
+    y="302"
+    class="box-small"
+  >
+    deterministic personalization is model-free
+  </text>
+
+  <path
+    d="M 350 267 L 455 267"
+    class="arrow"
+  />
+
+  <rect
+    x="900"
+    y="215"
+    width="275"
+    height="105"
+    rx="18"
+    fill="#10283a"
+    stroke="#327d8e"
+  />
+
+  <text
+    x="925"
+    y="250"
+    class="box-title"
+  >
+    Public judge service
+  </text>
+
+  <text
+    x="925"
+    y="278"
+    class="box-small"
+  >
+    Cloud Run · anonymous
+  </text>
+
+  <text
+    x="925"
+    y="300"
+    class="box-small"
+  >
+    model/cost routes locked
+  </text>
+
+  <rect
+    x="1245"
+    y="215"
+    width="275"
+    height="105"
+    rx="18"
+    fill="#2a2032"
+    stroke="#8c5aa0"
+  />
+
+  <text
+    x="1270"
+    y="250"
+    class="box-title"
+  >
+    Protected proof runtime
+  </text>
+
+  <text
+    x="1270"
+    y="278"
+    class="box-small"
+  >
+    authorized Google ADK execution
+  </text>
+
+  <text
+    x="1270"
+    y="300"
+    class="box-small"
+  >
+    Gemini + Firestore workflow
+  </text>
+
+  <path
+    d="M 795 267 L 900 267"
+    class="thin-arrow"
+  />
+
+  <path
+    d="M 1175 267 L 1245 267"
+    class="dash"
+  />
+
+  <text
+    x="80"
+    y="380"
+    class="section"
+  >
+    02 · GOOGLE ADK MULTI-AGENT ORCHESTRATION
+  </text>
+
+  <rect
+    x="80"
+    y="405"
+    width="1440"
+    height="225"
+    rx="24"
+    fill="#0d1929"
+    stroke="#294763"
+  />
+
+  <rect
+    x="105"
+    y="430"
+    width="180"
+    height="145"
+    rx="16"
+    fill="#17283f"
+    stroke="#375b83"
+  />
+
+  <text x="125" y="458" class="agent-num">AGENT 1</text>
+  <text x="125" y="487" class="agent-title">Discovery</text>
+  <text x="125" y="513" class="agent-sub">explicit opportunities</text>
+  <text x="125" y="533" class="agent-sub">+ latent candidates</text>
+
+  <rect
+    x="305"
+    y="430"
+    width="180"
+    height="145"
+    rx="16"
+    fill="#17283f"
+    stroke="#375b83"
+  />
+
+  <text x="325" y="458" class="agent-num">AGENT 2</text>
+  <text x="325" y="487" class="agent-title">Primary source</text>
+  <text x="325" y="507" class="agent-title">verification</text>
+  <text x="325" y="535" class="agent-sub">ground evidence</text>
+
+  <rect
+    x="505"
+    y="430"
+    width="180"
+    height="145"
+    rx="16"
+    fill="#233044"
+    stroke="#7c8fa8"
+  />
+
+  <text x="525" y="458" class="agent-num">AGENT 3</text>
+  <text x="525" y="487" class="agent-title">Hard gate</text>
+  <text x="525" y="513" class="agent-sub">eligibility · capital</text>
+  <text x="525" y="533" class="agent-sub">deadline authority</text>
+
+  <rect
+    x="705"
+    y="430"
+    width="180"
+    height="145"
+    rx="16"
+    fill="#17283f"
+    stroke="#375b83"
+  />
+
+  <text x="725" y="458" class="agent-num">AGENT 4</text>
+  <text x="725" y="487" class="agent-title">Investigation</text>
+  <text x="725" y="513" class="agent-sub">deeper evidence only</text>
+  <text x="725" y="533" class="agent-sub">after cheap gate survives</text>
+
+  <rect
+    x="905"
+    y="430"
+    width="180"
+    height="145"
+    rx="16"
+    fill="#17283f"
+    stroke="#375b83"
+  />
+
+  <text x="925" y="458" class="agent-num">AGENT 5</text>
+  <text x="925" y="487" class="agent-title">Failure memory</text>
+  <text x="925" y="513" class="agent-sub">similar failed paths</text>
+  <text x="925" y="533" class="agent-sub">become evidence</text>
+
+  <rect
+    x="1105"
+    y="430"
+    width="180"
+    height="145"
+    rx="16"
+    fill="#17283f"
+    stroke="#375b83"
+  />
+
+  <text x="1125" y="458" class="agent-num">AGENT 6</text>
+  <text x="1125" y="487" class="agent-title">Economics</text>
+  <text x="1125" y="513" class="agent-sub">unit economics</text>
+  <text x="1125" y="533" class="agent-sub">cost vs expected value</text>
+
+  <rect
+    x="1305"
+    y="430"
+    width="190"
+    height="145"
+    rx="16"
+    fill="#253148"
+    stroke="#8a72ba"
+  />
+
+  <text x="1325" y="458" class="agent-num">AGENT 7</text>
+  <text x="1325" y="487" class="agent-title">Final adjudication</text>
+  <text x="1325" y="513" class="agent-sub">PROMOTE · WATCH</text>
+  <text x="1325" y="533" class="agent-sub">or KILL</text>
+
+  <path d="M 285 502 L 305 502" class="arrow"/>
+  <path d="M 485 502 L 505 502" class="arrow"/>
+  <path d="M 685 502 L 705 502" class="arrow"/>
+  <path d="M 885 502 L 905 502" class="arrow"/>
+  <path d="M 1085 502 L 1105 502" class="arrow"/>
+  <path d="M 1285 502 L 1305 502" class="arrow"/>
+
+  <rect
+    x="105"
+    y="590"
+    width="1390"
+    height="24"
+    rx="12"
+    fill="#13253a"
+  />
+
+  <text
+    x="800"
+    y="607"
+    text-anchor="middle"
+    class="tiny"
+  >
+    Google ADK 2.6.3 orchestration · Gemini 3.5 Flash reasoning · specialized agents with enforced separation of concerns
+  </text>
+
+  <text
+    x="80"
+    y="685"
+    class="section"
+  >
+    03 · DETERMINISTIC AUTHORITY
+  </text>
+
+  <rect
+    x="80"
+    y="710"
+    width="335"
+    height="100"
+    rx="16"
+    fill="#16273c"
+    stroke="#53789f"
+  />
+
+  <text x="103" y="745" class="tool-title">
+    eligibility_capital_deadline_gate
+  </text>
+  <text x="103" y="773" class="tool-sub">
+    hard feasibility before expensive investigation
+  </text>
+
+  <rect
+    x="445"
+    y="710"
+    width="335"
+    height="100"
+    rx="16"
+    fill="#16273c"
+    stroke="#53789f"
+  />
+
+  <text x="468" y="745" class="tool-title">
+    failure_memory_similarity_check
+  </text>
+  <text x="468" y="773" class="tool-sub">
+    prior failure becomes explicit decision evidence
+  </text>
+
+  <rect
+    x="810"
+    y="710"
+    width="335"
+    height="100"
+    rx="16"
+    fill="#16273c"
+    stroke="#53789f"
+  />
+
+  <text x="833" y="745" class="tool-title">
+    calculate_unit_economics
+  </text>
+  <text x="833" y="773" class="tool-sub">
+    deterministic economic evidence
+  </text>
+
+  <rect
+    x="1175"
+    y="710"
+    width="345"
+    height="100"
+    rx="16"
+    fill="#1f2941"
+    stroke="#765eae"
+  />
+
+  <text x="1198" y="745" class="tool-title">
+    final_evidence_safety_adjudication
+  </text>
+  <text x="1198" y="773" class="tool-sub">
+    model cannot override authoritative state
+  </text>
+
+  <path
+    d="M 247 710 C 247 665, 595 665, 595 575"
+    class="thin-arrow"
+  />
+
+  <path
+    d="M 612 710 C 612 665, 995 665, 995 575"
+    class="thin-arrow"
+  />
+
+  <path
+    d="M 977 710 C 977 665, 1195 665, 1195 575"
+    class="thin-arrow"
+  />
+
+  <path
+    d="M 1347 710 L 1400 575"
+    class="thin-arrow"
+  />
+
+  <text
+    x="80"
+    y="865"
+    class="section"
+  >
+    04 · AUTHORITATIVE STATE, REPLAY &amp; HUMAN CONTROL
+  </text>
+
+  <rect
+    x="80"
+    y="890"
+    width="300"
+    height="105"
+    rx="18"
+    fill="#132c35"
+    stroke="#3e7f89"
+  />
+
+  <text x="105" y="925" class="box-title">
+    Cloud Firestore
+  </text>
+
+  <text x="105" y="953" class="box-small">
+    authoritative workflow state
+  </text>
+
+  <text x="105" y="975" class="box-small">
+    evidence · hashes · disposition
+  </text>
+
+  <rect
+    x="435"
+    y="890"
+    width="300"
+    height="105"
+    rx="18"
+    fill="#132c35"
+    stroke="#3e7f89"
+  />
+
+  <text x="460" y="925" class="box-title">
+    Idempotent replay
+  </text>
+
+  <text x="460" y="953" class="box-small">
+    same work → stored authority
+  </text>
+
+  <text x="460" y="975" class="box-small">
+    correctness + cost control
+  </text>
+
+  <rect
+    x="790"
+    y="890"
+    width="335"
+    height="105"
+    rx="18"
+    fill="#2b2532"
+    stroke="#8b708f"
+  />
+
+  <text x="815" y="925" class="box-title">
+    Human authority boundary
+  </text>
+
+  <text x="815" y="953" class="box-small">
+    money · identity · legal acceptance
+  </text>
+
+  <text x="815" y="975" class="box-small">
+    consequential external action
+  </text>
+
+  <rect
+    x="1180"
+    y="890"
+    width="340"
+    height="105"
+    rx="18"
+    fill="#142942"
+    stroke="#4d7ab0"
+  />
+
+  <text x="1205" y="925" class="box-title">
+    Google Cloud Run
+  </text>
+
+  <text x="1205" y="953" class="box-small">
+    public judge service + protected proof
+  </text>
+
+  <text x="1205" y="975" class="box-small">
+    independently bounded execution surfaces
+  </text>
+
+  <path d="M 380 942 L 435 942" class="arrow"/>
+  <path d="M 735 942 L 790 942" class="thin-arrow"/>
+
+  <rect
+    x="1190"
+    y="45"
+    width="145"
+    height="36"
+    rx="18"
+    fill="#19324f"
+    stroke="#416995"
+  />
+
+  <text
+    x="1262"
+    y="68"
+    text-anchor="middle"
+    class="badge"
+  >
+    Google ADK
+  </text>
+
+  <rect
+    x="1348"
+    y="45"
+    width="172"
+    height="36"
+    rx="18"
+    fill="#2b2542"
+    stroke="#715e9b"
+  />
+
+  <text
+    x="1434"
+    y="68"
+    text-anchor="middle"
+    class="badge"
+  >
+    Gemini 3.5 Flash
+  </text>
+
+  <text
+    x="80"
+    y="1030"
+    class="tiny"
+  >
+    AOO · Google All Things Agentic Hackathon · judge-facing architecture
+  </text>
+</svg>
