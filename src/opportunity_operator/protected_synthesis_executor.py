@@ -407,7 +407,7 @@ def build_protected_gemini_synthesis_executor(
 
         try:
             response = (
-                models.generate_content(
+                client.models.generate_content(
                     model=model,
                     contents=prompt,
                     config={

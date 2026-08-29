@@ -666,6 +666,76 @@ class PublicBoundaryTests(
         )
 
 
+class ProtectedClientLifetimeTests(
+    unittest.TestCase
+):
+
+    def test_returned_executor_retains_client_lifetime(self):
+
+        import gc
+        import weakref
+
+        client_refs = []
+        model_calls = []
+
+        def factory(
+            **kwargs,
+        ):
+            client = _Client(
+                _Response(
+                    parsed=
+                        synthesis_response()
+                ),
+                model_calls,
+            )
+
+            client_refs.append(
+                weakref.ref(
+                    client
+                )
+            )
+
+            return client
+
+        executor = (
+            build_protected_gemini_synthesis_executor(
+                environ=ENV,
+                client_factory=factory,
+            )
+        )
+
+        self.assertEqual(
+            len(client_refs),
+            1,
+        )
+
+        gc.collect()
+
+        self.assertIsNotNone(
+            client_refs[0](),
+            "returned executor must retain the Google GenAI Client",
+        )
+
+        result = executor(
+            "test prompt",
+            {
+                "type":
+                    "object"
+            },
+        )
+
+        self.assertEqual(
+            result,
+            synthesis_response(),
+        )
+
+        self.assertEqual(
+            len(model_calls),
+            1,
+        )
+
+
+
 if __name__ == "__main__":
     unittest.main()
 
