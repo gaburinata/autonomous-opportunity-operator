@@ -216,7 +216,7 @@ PUBLIC_MODE_BANNER = r"""
 
     <span>
       1 · Set your goal, resources and limits.
-      2 · Click “Find what AI can do for me”.
+      2 · Click “Find my best opportunities”.
       3 · Review your personalized Decision Inbox.
       No sign-up or model spend is required.
     </span>

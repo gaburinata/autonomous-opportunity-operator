@@ -472,16 +472,24 @@ summary {
       <h1>
         Let AI find ways to make you
         money or save you time.
+        Then prove which ones are worth pursuing.
       </h1>
 
       <div class="hero-copy">
         <strong>
           This is the Autonomous Opportunity Operator.
         </strong>
-        Tell it what you have and what your limits are.
-        AOO looks for opportunities where AI can do
-        most or all of the research, building, testing,
-        preparation or operation for you.
+        Tell AOO your goals, resources and limits.
+        It can discover or synthesize opportunities,
+        verify the evidence, test feasibility and economics,
+        remember failed paths, and stop weak opportunities
+        before they consume your time or money.
+        <br><br>
+        <strong>
+          AI proposes and investigates.
+          Deterministic gates decide what is allowed to count.
+          You approve consequential actions.
+        </strong>
       </div>
     </section>
 
@@ -713,7 +721,7 @@ summary {
           class="primary"
           type="submit"
           id="findButton"
-          aria-label="Find what AI can do for me"
+          aria-label="Find my best opportunities"
         >
           Find my best opportunities
         </button>

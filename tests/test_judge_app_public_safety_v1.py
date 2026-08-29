@@ -30,7 +30,7 @@ class JudgeAppPublicSafetyV1Tests(
         )
 
         self.assertIn(
-            "Find what AI can",
+            "Find my best opportunities",
             response.text,
         )
 

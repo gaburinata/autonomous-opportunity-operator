@@ -39,7 +39,7 @@ class PublicJudgeUxV1Tests(
         )
 
         self.assertIn(
-            "Find what AI can do for me",
+            "Find my best opportunities",
             text,
         )
 
