@@ -7,6 +7,9 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 
 import main as production
+from fastapi.responses import HTMLResponse
+from opportunity_operator.public_v5_home import render_public_v5_home
+from opportunity_operator.public_v5_operator import build_public_v5_view
 
 
 PUBLIC_JUDGE_MODE = True
@@ -663,6 +666,8 @@ app = FastAPI(
     response_class=HTMLResponse,
 )
 async def product_home() -> HTMLResponse:
+    # AOO_V5_PUBLIC_ROOT
+    return HTMLResponse(render_public_v5_home())
     original = await _invoke(
         _prod_home
     )
@@ -736,6 +741,9 @@ async def opportunities() -> Any:
 async def personalized(
     payload: dict[str, Any],
 ) -> Any:
+    # AOO_V5_PUBLIC_PERSONALIZATION
+    if isinstance(payload, dict) and payload.get("profile_version") == "5":
+        return build_public_v5_view(payload)
     return await _invoke(
         _prod_personalized,
         payload,
