@@ -46,6 +46,120 @@ def _required_env_text(
     return value.strip()
 
 
+# Google response_json_schema supports only a documented
+# subset of JSON Schema. AOO intentionally keeps a stricter
+# deterministic post-generation schema, including string-length
+# constraints. Do not weaken that authoritative validator.
+#
+# Instead, project the strict AOO schema into the subset accepted
+# by Vertex for generation guidance, then validate Gemini output
+# against the original strict AOO schema afterwards.
+_VERTEX_JSON_SCHEMA_KEYS = frozenset(
+    {
+        "$id",
+        "$defs",
+        "$ref",
+        "$anchor",
+        "type",
+        "format",
+        "title",
+        "description",
+        "enum",
+        "items",
+        "prefixItems",
+        "minItems",
+        "maxItems",
+        "minimum",
+        "maximum",
+        "anyOf",
+        "oneOf",
+        "properties",
+        "additionalProperties",
+        "required",
+        "propertyOrdering",
+    }
+)
+
+
+def _vertex_response_schema(
+    value: object,
+) -> object:
+    """Project strict AOO JSON Schema into Vertex's supported subset."""
+
+    if isinstance(value, Mapping):
+
+        projected: dict[str, object] = {}
+
+        for key, child in value.items():
+
+            if key not in _VERTEX_JSON_SCHEMA_KEYS:
+                continue
+
+            if key == "properties":
+
+                if not isinstance(
+                    child,
+                    Mapping,
+                ):
+                    raise ValueError(
+                        "invalid schema properties"
+                    )
+
+                projected[
+                    key
+                ] = {
+                    str(name):
+                        _vertex_response_schema(
+                            schema
+                        )
+                    for name, schema
+                    in child.items()
+                }
+
+                continue
+
+            if key == "$defs":
+
+                if not isinstance(
+                    child,
+                    Mapping,
+                ):
+                    raise ValueError(
+                        "invalid schema defs"
+                    )
+
+                projected[
+                    key
+                ] = {
+                    str(name):
+                        _vertex_response_schema(
+                            schema
+                        )
+                    for name, schema
+                    in child.items()
+                }
+
+                continue
+
+            projected[
+                key
+            ] = _vertex_response_schema(
+                child
+            )
+
+        return projected
+
+    if isinstance(value, list):
+        return [
+            _vertex_response_schema(
+                child
+            )
+            for child in value
+        ]
+
+    return value
+
+
 def _parse_payload(
     response: object,
 ) -> dict[str, object]:
@@ -180,6 +294,12 @@ def build_protected_gemini_synthesis_executor(
                 "invalid synthesis schema"
             )
 
+        vertex_schema = (
+            _vertex_response_schema(
+                dict(schema)
+            )
+        )
+
         response = (
             models.generate_content(
                 model=model,
@@ -192,7 +312,7 @@ def build_protected_gemini_synthesis_executor(
                         "application/json",
 
                     "response_json_schema":
-                        dict(schema),
+                        vertex_schema,
                 },
             )
         )

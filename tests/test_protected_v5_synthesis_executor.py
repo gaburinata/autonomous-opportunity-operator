@@ -264,10 +264,43 @@ class ProtectedGeminiExecutorTests(
             "type":
                 "object",
 
+            "additionalProperties":
+                False,
+
             "properties": {
                 "observations": {
                     "type":
                         "array",
+
+                    "minItems":
+                        1,
+
+                    "maxItems":
+                        32,
+
+                    "items": {
+                        "type":
+                            "object",
+
+                        "properties": {
+                            "title": {
+                                "type":
+                                    "string",
+
+                                # Strict AOO validation keeps these,
+                                # but Vertex generation schema must not.
+                                "minLength":
+                                    1,
+
+                                "maxLength":
+                                    1000,
+                            }
+                        },
+
+                        "required": [
+                            "title"
+                        ],
+                    },
                 }
             },
 
@@ -310,11 +343,98 @@ class ProtectedGeminiExecutorTests(
             "application/json",
         )
 
-        self.assertEqual(
+        vertex_schema = (
             call["config"][
                 "response_json_schema"
+            ]
+        )
+
+        self.assertEqual(
+            vertex_schema[
+                "type"
             ],
-            schema,
+            "object",
+        )
+
+        self.assertFalse(
+            vertex_schema[
+                "additionalProperties"
+            ]
+        )
+
+        observations = (
+            vertex_schema[
+                "properties"
+            ][
+                "observations"
+            ]
+        )
+
+        self.assertEqual(
+            observations[
+                "minItems"
+            ],
+            1,
+        )
+
+        self.assertEqual(
+            observations[
+                "maxItems"
+            ],
+            32,
+        )
+
+        title_schema = (
+            observations[
+                "items"
+            ][
+                "properties"
+            ][
+                "title"
+            ]
+        )
+
+        self.assertEqual(
+            title_schema,
+            {
+                "type":
+                    "string"
+            },
+        )
+
+        # The caller's strict schema must not be mutated.
+        self.assertEqual(
+            schema[
+                "properties"
+            ][
+                "observations"
+            ][
+                "items"
+            ][
+                "properties"
+            ][
+                "title"
+            ][
+                "minLength"
+            ],
+            1,
+        )
+
+        self.assertEqual(
+            schema[
+                "properties"
+            ][
+                "observations"
+            ][
+                "items"
+            ][
+                "properties"
+            ][
+                "title"
+            ][
+                "maxLength"
+            ],
+            1000,
         )
 
     def test_json_text_fallback_is_supported(self):
