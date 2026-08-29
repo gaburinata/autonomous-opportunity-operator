@@ -12,6 +12,9 @@ from main import create_app
 from opportunity_operator.protected_synthesis_executor import (
     build_protected_gemini_synthesis_executor,
 )
+from opportunity_operator.protected_synthesis_preflight import (
+    run_protected_synthesis_executor_preflight,
+)
 
 
 app = create_app(
@@ -19,3 +22,11 @@ app = create_app(
         build_protected_gemini_synthesis_executor
     )
 )
+
+@app.get("/internal/synthesis-executor-preflight")
+async def synthesis_executor_preflight():
+    """Private preview diagnostic. Constructs executor; never invokes model."""
+
+    return (
+        run_protected_synthesis_executor_preflight()
+    )
