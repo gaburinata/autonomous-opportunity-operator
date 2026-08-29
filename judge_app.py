@@ -504,18 +504,38 @@ PUBLIC_MODE_SCRIPT = r"""
 
   enforcePublicUx();
 
-  const observer =
-    new MutationObserver(
-      enforcePublicUx
-    );
+  /*
+   * Public product cards are re-rendered after personalization.
+   * Observe only that bounded container and only re-apply the
+   * investigate-button replacement there.
+   *
+   * Do NOT observe document.documentElement: enforcePublicUx()
+   * itself changes DOM text/children, which can create a
+   * self-triggering MutationObserver loop.
+   */
+  if (!isConsole) {
+    const lanes =
+      document.getElementById(
+        "productLanes"
+      );
 
-  observer.observe(
-    document.documentElement,
-    {
-      childList: true,
-      subtree: true
+    if (lanes) {
+      const lanesObserver =
+        new MutationObserver(
+          () => {
+            replaceInvestigateButtons();
+          }
+        );
+
+      lanesObserver.observe(
+        lanes,
+        {
+          childList: true,
+          subtree: true
+        }
+      );
     }
-  );
+  }
 })();
 </script>
 """
