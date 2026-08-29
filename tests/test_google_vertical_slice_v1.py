@@ -357,10 +357,15 @@ class StaticBoundaryAndBuildTests(unittest.TestCase):
         for package in ("google-adk", "fastapi", "uvicorn", "google-cloud-firestore"):
             self.assertNotRegex(pyproject, rf'"{re.escape(package)}\s*(?:>=|~=|\^|>|\*)')
 
-    def test_python_version_is_exactly_312(self):
+    def test_python_version_matches_submission_runtime(self):
         version_file = ROOT / ".python-version"
         self.assertTrue(version_file.is_file())
-        self.assertEqual(version_file.read_text(encoding="utf-8").rstrip("\n"), "3.12")
+        self.assertEqual(
+            version_file.read_text(
+                encoding="utf-8"
+            ).rstrip("\n"),
+            "3.13.14",
+        )
 
 
 if __name__ == "__main__":

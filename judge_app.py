@@ -81,14 +81,24 @@ def _html_text(
 
 PUBLIC_MODE_STYLE = r"""
 <style id="aoo-public-judge-mode-style">
-.aoo-public-judge-mode {
+
+.aoo-public-guide {
   width: min(1440px, calc(100% - 40px));
   margin: 14px auto 0;
-  padding: 11px 14px;
+  padding: 15px 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
   border: 1px solid rgba(110,231,183,.22);
-  border-radius: 12px;
+  border-radius: 14px;
   color: #d6f3e7;
-  background: rgba(110,231,183,.055);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(110,231,183,.07),
+      rgba(141,174,255,.045)
+    );
   font-family:
     Inter,
     ui-sans-serif,
@@ -99,20 +109,159 @@ PUBLIC_MODE_STYLE = r"""
   font-size: 11px;
   line-height: 1.5;
 }
-.aoo-public-judge-mode strong {
-  color: #f4fff9;
+
+.aoo-public-guide-copy {
+  min-width: 0;
 }
+
+.aoo-public-kicker {
+  display: block;
+  margin-bottom: 3px;
+  color: #8daeff;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.aoo-public-guide strong {
+  display: block;
+  color: #f4fff9;
+  font-size: 14px;
+}
+
+.aoo-public-guide span:last-child {
+  display: block;
+  margin-top: 3px;
+  color: #b8c5d8;
+}
+
+.aoo-public-guide-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.aoo-public-guide a,
+.aoo-public-proof-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 760;
+}
+
+.aoo-public-guide a:first-child {
+  color: #08101f;
+  background:
+    linear-gradient(
+      90deg,
+      #91b0ff,
+      #c0acff
+    );
+}
+
+.aoo-public-guide a:last-child {
+  color: #d6ddec;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.035);
+}
+
+.aoo-public-readonly-note {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(141,174,255,.18);
+  border-radius: 11px;
+  color: #c7d3ee;
+  background: rgba(141,174,255,.045);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.aoo-public-readonly-note strong {
+  color: #f3f6ff;
+}
+
+@media (max-width: 760px) {
+  .aoo-public-guide {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 </style>
 """
 
 PUBLIC_MODE_BANNER = r"""
-<div class="aoo-public-judge-mode" role="note">
-  <strong>Public judge demo · cost-safe mode.</strong>
-  Product exploration, deterministic personalization,
-  provenance and technical proof remain available here.
-  Fresh discovery and live Google ADK + Gemini execution
-  are deliberately locked on the anonymous service.
-  The unedited contest demo shows the verified live workflow.
+<div
+  class="aoo-public-guide"
+  id="aooPublicProductGuide"
+  role="note"
+>
+  <div class="aoo-public-guide-copy">
+    <span class="aoo-public-kicker">
+      Public judge demo · Start here
+    </span>
+
+    <strong>
+      This is the Autonomous Opportunity Operator.
+    </strong>
+
+    <span>
+      1 · Set your goal, resources and limits.
+      2 · Click “Find what AI can do for me”.
+      3 · Review your personalized Decision Inbox.
+      No sign-up or model spend is required.
+    </span>
+  </div>
+
+  <div class="aoo-public-guide-actions">
+    <a href="#frontdoor">
+      Start with my profile ↓
+    </a>
+
+    <a href="/judge-console">
+      Technical proof
+    </a>
+  </div>
+</div>
+"""
+
+PUBLIC_CONSOLE_BANNER = r"""
+<div
+  class="aoo-public-guide"
+  id="aooPublicConsoleGuide"
+  role="note"
+>
+  <div class="aoo-public-guide-copy">
+    <span class="aoo-public-kicker">
+      Public judge demo · Read-only technical proof
+    </span>
+
+    <strong>
+      Technical proof — not the product interface.
+    </strong>
+
+    <span>
+      This page shows the verified seven-agent architecture,
+      deterministic tools, provenance, replay and reference-run
+      evidence. Live Gemini execution is intentionally unavailable
+      to anonymous visitors.
+    </span>
+  </div>
+
+  <div class="aoo-public-guide-actions">
+    <a href="/">
+      ← Open AOO product
+    </a>
+
+    <a href="#verified-proof">
+      View verified run
+    </a>
+  </div>
 </div>
 """
 
@@ -130,14 +279,20 @@ PUBLIC_MODE_SCRIPT = r"""
     "/decision/primary-source"
   ]);
 
-  const originalFetch = window.fetch.bind(window);
+  const isConsole =
+    window.location.pathname === "/judge-console";
+
+  const originalFetch =
+    window.fetch.bind(window);
 
   window.fetch = function(input, init) {
     let pathname = "";
 
     try {
       pathname = new URL(
-        typeof input === "string" ? input : input.url,
+        typeof input === "string"
+          ? input
+          : input.url,
         window.location.href
       ).pathname;
     } catch (_) {
@@ -146,7 +301,10 @@ PUBLIC_MODE_SCRIPT = r"""
 
     const method = String(
       (init && init.method)
-      || (typeof input !== "string" && input.method)
+      || (
+        typeof input !== "string"
+        && input.method
+      )
       || "GET"
     ).toUpperCase();
 
@@ -176,62 +334,180 @@ PUBLIC_MODE_SCRIPT = r"""
     return originalFetch(input, init);
   };
 
-  function lockExpensiveControls() {
-    const refresh = document.getElementById(
-      "refreshButton"
-    );
 
-    if (refresh) {
-      refresh.disabled = true;
-      refresh.textContent =
-        "Live discovery shown in demo video";
-      refresh.title =
-        "Disabled on the anonymous judge service.";
+  function replaceInvestigateButtons() {
+
+    if (isConsole) {
+      return;
     }
 
     document
       .querySelectorAll("[data-investigate]")
       .forEach((button) => {
-        button.disabled = true;
-        button.textContent =
-          "7-agent run shown in demo video";
-        button.title =
-          "Live Gemini execution is locked "
-          + "on the anonymous judge service.";
-      });
 
-    document
-      .querySelectorAll("button")
-      .forEach((button) => {
-        const text = String(
-          button.textContent || ""
-        ).toLowerCase();
+        const link =
+          document.createElement("a");
 
-        const expensive =
-          text.includes("live workflow")
-          || text.includes("fresh workflow")
-          || (
-            text.includes("gemini")
-            && (
-              text.includes("run")
-              || text.includes("start")
-            )
-          );
+        link.className =
+          button.className
+          || "button primary";
 
-        if (expensive) {
-          button.disabled = true;
-          button.title =
-            "Live model execution is demonstrated "
-            + "in the contest video.";
-        }
+        link.href =
+          "/judge-console#verified-proof";
+
+        link.textContent =
+          "View verified 7-agent proof";
+
+        link.title =
+          "Open the read-only technical proof "
+          + "for the verified seven-agent workflow.";
+
+        link.setAttribute(
+          "data-public-proof-link",
+          "1"
+        );
+
+        button.replaceWith(link);
       });
   }
 
-  lockExpensiveControls();
 
-  const observer = new MutationObserver(
-    lockExpensiveControls
-  );
+  function lockProductOnlyControls() {
+
+    if (isConsole) {
+      return;
+    }
+
+    const refresh =
+      document.getElementById(
+        "refreshButton"
+      );
+
+    if (refresh) {
+      refresh.disabled = true;
+      refresh.textContent =
+        "Fresh discovery shown in demo video";
+      refresh.title =
+        "Fresh network discovery is disabled "
+        + "on the anonymous judge service.";
+    }
+
+    replaceInvestigateButtons();
+  }
+
+
+  function makeConsoleReadOnly() {
+
+    if (!isConsole) {
+      return;
+    }
+
+    const preflight =
+      document.getElementById(
+        "preflightButton"
+      );
+
+    const live =
+      document.getElementById(
+        "liveButton"
+      );
+
+    let actions = null;
+
+    if (preflight) {
+      preflight.disabled = true;
+      preflight.hidden = true;
+      preflight.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+      actions = preflight.closest(
+        ".actions"
+      );
+    }
+
+    if (live) {
+      live.disabled = true;
+      live.hidden = true;
+      live.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      if (!actions) {
+        actions = live.closest(
+          ".actions"
+        );
+      }
+    }
+
+    if (
+      actions
+      && !actions.querySelector(
+        "[data-public-readonly-note]"
+      )
+    ) {
+      const note =
+        document.createElement("div");
+
+      note.className =
+        "aoo-public-readonly-note";
+
+      note.setAttribute(
+        "data-public-readonly-note",
+        "1"
+      );
+
+      note.innerHTML =
+        "<strong>Read-only public proof.</strong> "
+        + "The buttons that start source ingestion "
+        + "or Gemini execution are intentionally removed "
+        + "from this anonymous service. "
+        + "Use this page to inspect the verified run, "
+        + "agents, tools, provenance and safety boundary.";
+
+      actions.appendChild(note);
+    }
+
+    const placeholder =
+      document.querySelector(
+        ".placeholder-intro"
+      );
+
+    if (placeholder) {
+      placeholder.innerHTML =
+        "<strong>Verified workflow evidence</strong>"
+        + "This public page does not start a new workflow. "
+        + "The contest proof-of-action video demonstrates "
+        + "the live Google ADK + Gemini execution.";
+    }
+
+    const proof =
+      document.querySelector(
+        ".hero-proof"
+      );
+
+    if (
+      proof
+      && !proof.id
+    ) {
+      proof.id = "verified-proof";
+    }
+  }
+
+
+  function enforcePublicUx() {
+    lockProductOnlyControls();
+    makeConsoleReadOnly();
+  }
+
+
+  enforcePublicUx();
+
+  const observer =
+    new MutationObserver(
+      enforcePublicUx
+    );
 
   observer.observe(
     document.documentElement,
@@ -239,22 +515,6 @@ PUBLIC_MODE_SCRIPT = r"""
       childList: true,
       subtree: true
     }
-  );
-
-  document.addEventListener(
-    "click",
-    (event) => {
-      const button =
-        event.target.closest("button");
-
-      if (!button || !button.disabled) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    },
-    true
   );
 })();
 </script>
@@ -264,31 +524,84 @@ PUBLIC_MODE_SCRIPT = r"""
 def _inject_public_mode(
     html: str,
 ) -> str:
+
+    is_console = (
+        'id="preflightButton"' in html
+        and
+        'id="liveButton"' in html
+    )
+
+    banner = (
+        PUBLIC_CONSOLE_BANNER
+        if is_console
+        else PUBLIC_MODE_BANNER
+    )
+
+    if is_console:
+
+        html = html.replace(
+            'id="preflightButton"',
+            (
+                'id="preflightButton" '
+                'disabled hidden '
+                'aria-hidden="true"'
+            ),
+            1,
+        )
+
+        html = html.replace(
+            'id="liveButton"',
+            (
+                'id="liveButton" '
+                'disabled hidden '
+                'aria-hidden="true"'
+            ),
+            1,
+        )
+
+        html = html.replace(
+            '<div class="hero-proof">',
+            (
+                '<div '
+                'class="hero-proof" '
+                'id="verified-proof">'
+            ),
+            1,
+        )
+
     if "<body" in html:
-        start = html.find(">")
-        body_index = html.find("<body")
+
+        body_index = html.find(
+            "<body"
+        )
 
         if body_index >= 0:
+
             body_close = html.find(
                 ">",
                 body_index,
             )
 
             if body_close >= 0:
+
                 html = (
                     html[: body_close + 1]
                     + PUBLIC_MODE_STYLE
-                    + PUBLIC_MODE_BANNER
+                    + banner
                     + html[body_close + 1 :]
                 )
 
     if "</body>" in html:
+
         html = html.replace(
             "</body>",
-            PUBLIC_MODE_SCRIPT + "\n</body>",
+            PUBLIC_MODE_SCRIPT
+            + "\n</body>",
             1,
         )
+
     else:
+
         html += PUBLIC_MODE_SCRIPT
 
     return html
