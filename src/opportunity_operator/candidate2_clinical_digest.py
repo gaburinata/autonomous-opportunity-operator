@@ -334,6 +334,11 @@ def build_digest_generation_request(
                     {
                         "type":
                             "string",
+
+                        "enum":
+                            [
+                                PROTOTYPE_KIND,
+                            ],
                     },
 
                 "digest_title":
@@ -445,6 +450,11 @@ def build_digest_generation_request(
                     {
                         "type":
                             "string",
+
+                        "enum":
+                            [
+                                DISCLAIMER,
+                            ],
                     },
             },
 

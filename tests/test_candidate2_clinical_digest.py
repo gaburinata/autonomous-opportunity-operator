@@ -436,5 +436,84 @@ class OutputContractTests(
         )
 
 
+
+class AuthorityLiteralSchemaTests(
+    unittest.TestCase
+):
+
+    def test_prototype_kind_is_schema_enforced_constant(self):
+
+        request = (
+            build_digest_generation_request(
+                records()
+            )
+        )
+
+        schema = request[
+            "response_schema"
+        ]
+
+        prototype = (
+            schema[
+                "properties"
+            ][
+                "prototype_kind"
+            ]
+        )
+
+        self.assertEqual(
+            prototype[
+                "type"
+            ],
+            "string",
+        )
+
+        self.assertEqual(
+            prototype[
+                "enum"
+            ],
+            [
+                PROTOTYPE_KIND,
+            ],
+        )
+
+
+    def test_disclaimer_is_schema_enforced_constant(self):
+
+        request = (
+            build_digest_generation_request(
+                records()
+            )
+        )
+
+        schema = request[
+            "response_schema"
+        ]
+
+        disclaimer = (
+            schema[
+                "properties"
+            ][
+                "disclaimer"
+            ]
+        )
+
+        self.assertEqual(
+            disclaimer[
+                "type"
+            ],
+            "string",
+        )
+
+        self.assertEqual(
+            disclaimer[
+                "enum"
+            ],
+            [
+                DISCLAIMER,
+            ],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
