@@ -57,27 +57,16 @@ def _required_env_text(
 # against the original strict AOO schema afterwards.
 _VERTEX_JSON_SCHEMA_KEYS = frozenset(
     {
-        "$id",
-        "$defs",
-        "$ref",
-        "$anchor",
+        # Generation guidance only.
+        #
+        # The authoritative AOO schema is deliberately stricter and is
+        # applied after generation. Vertex only needs enough structure
+        # to produce the expected object shape.
         "type",
-        "format",
-        "title",
-        "description",
-        "enum",
-        "items",
-        "prefixItems",
-        "minItems",
-        "maxItems",
-        "minimum",
-        "maximum",
-        "anyOf",
-        "oneOf",
         "properties",
-        "additionalProperties",
         "required",
-        "propertyOrdering",
+        "items",
+        "enum",
     }
 )
 

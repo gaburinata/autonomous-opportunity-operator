@@ -356,10 +356,9 @@ class ProtectedGeminiExecutorTests(
             "object",
         )
 
-        self.assertFalse(
-            vertex_schema[
-                "additionalProperties"
-            ]
+        self.assertNotIn(
+            "additionalProperties",
+            vertex_schema,
         )
 
         observations = (
@@ -370,18 +369,14 @@ class ProtectedGeminiExecutorTests(
             ]
         )
 
-        self.assertEqual(
-            observations[
-                "minItems"
-            ],
-            1,
+        self.assertNotIn(
+            "minItems",
+            observations,
         )
 
-        self.assertEqual(
-            observations[
-                "maxItems"
-            ],
-            32,
+        self.assertNotIn(
+            "maxItems",
+            observations,
         )
 
         title_schema = (
