@@ -24,6 +24,8 @@ from opportunity_operator.synthesis_runtime import (
     canonicalize_evidence_items, execute_evidence_backed_synthesis,
 )
 from opportunity_operator.user_profile import canonicalize_user_profile
+from opportunity_operator.public_v5_operator import canonicalize_v5_profile
+from opportunity_operator.v5_synthesis_bridge import execute_v5_evidence_backed_synthesis, to_v3_synthesis_profile
 
 
 class ProofRequest(BaseModel):
@@ -192,6 +194,140 @@ def create_app(*, store_factory=None, executor_factory=None, environ=None,
             payload["profile"], {"items": []}, trusted_candidates
         )
         return {**synthesis, "product_view": product_view}
+
+    @service.post("/opportunities/synthesize-v5")
+    async def synthesize_v5_opportunities(payload: dict):
+        """Protected V5 evidence-backed latent opportunity synthesis."""
+
+        try:
+            if (
+                not isinstance(payload, Mapping)
+                or set(payload)
+                != {"profile", "evidence_items"}
+            ):
+                raise ValueError(
+                    "invalid V5 synthesis request"
+                )
+
+            canonicalize_v5_profile(
+                payload["profile"]
+            )
+
+            canonicalize_evidence_items(
+                payload["evidence_items"]
+            )
+
+        except (
+            TypeError,
+            ValueError,
+            KeyError,
+            ArithmeticError,
+        ):
+            return {
+                "status": "INVALID",
+                "reason_codes": [
+                    "INVALID_V5_SYNTHESIS_REQUEST"
+                ],
+                "candidates": [],
+                "evidence_source_ids": [],
+            }
+
+        if synthesis_executor_factory is None:
+            return {
+                "status": "DECISION_REQUIRED",
+                "reason_codes": [
+                    "SYNTHESIS_EXECUTOR_NOT_CONFIGURED"
+                ],
+                "candidates": [],
+                "evidence_source_ids": [],
+            }
+
+        try:
+            executor = (
+                synthesis_executor_factory()
+            )
+        except Exception:
+            return {
+                "status": "FAIL_CLOSED",
+                "reason_codes": [
+                    "SYNTHESIS_EXECUTOR_FAILED"
+                ],
+                "candidates": [],
+                "evidence_source_ids": [],
+            }
+
+        synthesis = (
+            execute_v5_evidence_backed_synthesis(
+                payload["profile"],
+                payload["evidence_items"],
+                executor,
+            )
+        )
+
+        if synthesis["status"] != "PASS":
+            return synthesis
+
+        trusted_candidates = [
+            OpportunityCandidate(
+                **{
+                    **candidate,
+                    "origin":
+                        CandidateOrigin(
+                            candidate["origin"]
+                        ),
+                    "source_ids":
+                        tuple(
+                            candidate[
+                                "source_ids"
+                            ]
+                        ),
+                    **{
+                        name: (
+                            Decimal(
+                                candidate[
+                                    name
+                                ]
+                            )
+                            if candidate[
+                                name
+                            ]
+                            is not None
+                            else None
+                        )
+                        for name in (
+                            "capital_required",
+                            "estimated_human_hours",
+                            "estimated_upside",
+                            "max_loss",
+                        )
+                    },
+                }
+            )
+            for candidate
+            in synthesis[
+                "candidates"
+            ]
+        ]
+
+        legacy_profile = (
+            to_v3_synthesis_profile(
+                payload["profile"]
+            )
+        )
+
+        product_view = (
+            build_product_view(
+                legacy_profile,
+                {"items": []},
+                trusted_candidates,
+            )
+        )
+
+        return {
+            **synthesis,
+            "product_view":
+                product_view,
+        }
 
     @service.get("/health")
     async def health():

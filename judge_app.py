@@ -17,6 +17,7 @@ PUBLIC_JUDGE_MODE = True
 BLOCKED_MUTATION_PATHS = {
     "/discover/refresh",
     "/opportunities/synthesize",
+    "/opportunities/synthesize-v5",
     "/proof/discovered",
     "/proof/human-gate",
     "/intake/primary-source",
