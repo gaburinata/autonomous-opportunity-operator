@@ -668,3 +668,118 @@ class PublicBoundaryTests(
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ProtectedExecutorDiagnosticTests(
+    unittest.TestCase
+):
+
+    def test_diagnostic_exposes_type_not_credentials(self):
+
+        from opportunity_operator.protected_synthesis_executor import (
+            _safe_executor_diagnostic,
+        )
+
+        exc = RuntimeError(
+            "400 invalid schema "
+            "Bearer SUPERSECRET "
+            "access_token=SECRET2 "
+            "api_key=SECRET3"
+        )
+
+        output = _safe_executor_diagnostic(
+            "GENERATE_CONTENT",
+            exc,
+        )
+
+        self.assertIn(
+            "TYPE=RuntimeError",
+            output,
+        )
+
+        self.assertIn(
+            "STAGE=GENERATE_CONTENT",
+            output,
+        )
+
+        self.assertIn(
+            "400 invalid schema",
+            output,
+        )
+
+        for secret in (
+            "SUPERSECRET",
+            "SECRET2",
+            "SECRET3",
+        ):
+            self.assertNotIn(
+                secret,
+                output,
+            )
+
+    def test_generate_exception_is_logged_then_reraised(self):
+
+        import contextlib
+        import io
+
+        class FailingModels:
+
+            def generate_content(
+                self,
+                **kwargs,
+            ):
+                raise RuntimeError(
+                    "synthetic provider failure"
+                )
+
+        class FailingClient:
+
+            models = FailingModels()
+
+        def client_factory(
+            **kwargs,
+        ):
+            return FailingClient()
+
+        executor = (
+            build_protected_gemini_synthesis_executor(
+                environ=ENV,
+                client_factory=
+                    client_factory,
+            )
+        )
+
+        stderr = io.StringIO()
+
+        with (
+            contextlib.redirect_stderr(
+                stderr
+            ),
+            self.assertRaises(
+                RuntimeError
+            ),
+        ):
+            executor(
+                "prompt",
+                {
+                    "type":
+                        "object"
+                },
+            )
+
+        logged = stderr.getvalue()
+
+        self.assertIn(
+            "AOO_SYNTHESIS_EXECUTOR_DIAGNOSTIC",
+            logged,
+        )
+
+        self.assertIn(
+            "STAGE=GENERATE_CONTENT",
+            logged,
+        )
+
+        self.assertIn(
+            "synthetic provider failure",
+            logged,
+        )

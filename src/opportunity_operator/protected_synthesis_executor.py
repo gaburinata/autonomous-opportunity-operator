@@ -15,6 +15,7 @@ from collections.abc import Mapping
 import json
 import os
 import re
+import sys
 from typing import Any, Callable
 
 
@@ -160,6 +161,110 @@ def _vertex_response_schema(
     return value
 
 
+def _safe_executor_diagnostic(
+    stage: str,
+    exc: BaseException,
+) -> str:
+    """Return bounded non-secret error metadata for protected logs only."""
+
+    exc_type = type(exc).__name__
+
+    code = getattr(
+        exc,
+        "code",
+        None,
+    )
+
+    status = getattr(
+        exc,
+        "status",
+        None,
+    )
+
+    message = getattr(
+        exc,
+        "message",
+        None,
+    )
+
+    if not isinstance(
+        message,
+        str,
+    ):
+        message = str(exc)
+
+    # Never permit auth material into Cloud Run logs.
+    redactions = (
+        (
+            re.compile(
+                r"Bearer\s+[^\s\"']+",
+                re.I,
+            ),
+            "Bearer <REDACTED>",
+        ),
+        (
+            re.compile(
+                r"(?:access[_-]?token|id[_-]?token|api[_-]?key)"
+                r"\s*[=:]\s*[^\s,;\"']+",
+                re.I,
+            ),
+            "<REDACTED_CREDENTIAL>",
+        ),
+        (
+            re.compile(
+                r"ya29\.[A-Za-z0-9._-]+",
+                re.I,
+            ),
+            "<REDACTED_TOKEN>",
+        ),
+    )
+
+    for pattern, replacement in redactions:
+        message = pattern.sub(
+            replacement,
+            message,
+        )
+
+    message = " ".join(
+        message.split()
+    )
+
+    if len(message) > 1200:
+        message = (
+            message[:1200]
+            + "...<TRUNCATED>"
+        )
+
+    return (
+        "AOO_SYNTHESIS_EXECUTOR_DIAGNOSTIC"
+        + "|STAGE="
+        + stage
+        + "|TYPE="
+        + exc_type
+        + "|CODE="
+        + repr(code)
+        + "|STATUS="
+        + repr(status)
+        + "|MESSAGE="
+        + message
+    )
+
+
+def _log_executor_failure(
+    stage: str,
+    exc: BaseException,
+) -> None:
+
+    print(
+        _safe_executor_diagnostic(
+            stage,
+            exc,
+        ),
+        file=sys.stderr,
+        flush=True,
+    )
+
+
 def _parse_payload(
     response: object,
 ) -> dict[str, object]:
@@ -300,26 +405,42 @@ def build_protected_gemini_synthesis_executor(
             )
         )
 
-        response = (
-            models.generate_content(
-                model=model,
-                contents=prompt,
-                config={
-                    "temperature":
-                        0,
+        try:
+            response = (
+                models.generate_content(
+                    model=model,
+                    contents=prompt,
+                    config={
+                        "temperature":
+                            0,
 
-                    "response_mime_type":
-                        "application/json",
+                        "response_mime_type":
+                            "application/json",
 
-                    "response_json_schema":
-                        vertex_schema,
-                },
+                        "response_json_schema":
+                            vertex_schema,
+                    },
+                )
             )
-        )
 
-        return _parse_payload(
-            response
-        )
+        except Exception as exc:
+            _log_executor_failure(
+                "GENERATE_CONTENT",
+                exc,
+            )
+            raise
+
+        try:
+            return _parse_payload(
+                response
+            )
+
+        except Exception as exc:
+            _log_executor_failure(
+                "PARSE_PAYLOAD",
+                exc,
+            )
+            raise
 
     return executor
 
