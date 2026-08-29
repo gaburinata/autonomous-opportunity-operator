@@ -55,6 +55,16 @@ class PublicV5HomeTests(
         )
 
         self.assertIn(
+            "How many hours of your time can it use each week?",
+            text,
+        )
+
+        self.assertIn(
+            "AOO shows up to six strong leads",
+            text,
+        )
+
+        self.assertIn(
             "Find my best opportunities",
             text,
         )
@@ -126,7 +136,7 @@ class PublicV5HomeTests(
                     "recommendations"
                 ]
             ),
-            3,
+            6,
         )
 
     def test_contest_exclusion_changes_real_snapshot_view(self):

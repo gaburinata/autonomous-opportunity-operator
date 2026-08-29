@@ -605,7 +605,7 @@ summary {
 
           <div class="field">
             <label for="hours">
-              How much of your time can it use each week?
+              How many hours of your time can it use each week?
             </label>
 
             <input
@@ -741,7 +741,8 @@ summary {
       <h2>Your best current leads</h2>
 
       <div class="results-intro">
-        AOO shows at most three.
+        AOO shows up to six strong leads and mixes
+        opportunity types when the evidence allows.
         Unknown facts stay unknown instead of being guessed.
       </div>
 

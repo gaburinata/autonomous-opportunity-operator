@@ -108,7 +108,7 @@ class PublicV5OperatorTests(
                 )
             )
 
-    def test_output_is_bounded_to_three(self):
+    def test_output_is_bounded_to_six(self):
         items = [
             candidate(
                 title=f"Opportunity {i}"
@@ -127,7 +127,54 @@ class PublicV5OperatorTests(
                     "recommendations"
                 ]
             ),
-            3,
+            6,
+        )
+
+    def test_category_diversity_precedes_same_category_fill(self):
+        items = [
+            candidate(
+                title="Hackathon One",
+                category="hackathon",
+            ),
+            candidate(
+                title="Hackathon Two",
+                category="hackathon",
+            ),
+            candidate(
+                title="Hackathon Three",
+                category="hackathon",
+            ),
+            candidate(
+                title="Open Source Grant",
+                category="grant",
+            ),
+        ]
+
+        result = build_public_v5_view(
+            profile(),
+            items=items,
+        )
+
+        categories = [
+            item["category"]
+            for item in result[
+                "recommendations"
+            ]
+        ]
+
+        self.assertGreaterEqual(
+            len(categories),
+            2,
+        )
+
+        self.assertEqual(
+            categories[0],
+            "Competition",
+        )
+
+        self.assertEqual(
+            categories[1],
+            "Grant / funding",
         )
 
     def test_competition_exclusion_changes_output(self):

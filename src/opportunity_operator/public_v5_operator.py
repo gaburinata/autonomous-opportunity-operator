@@ -1163,10 +1163,72 @@ def build_public_v5_view(
         )
     )
 
-    recommendations = [
-        row[2]
-        for row in ranked[:3]
-    ]
+    # Diversity-first presentation:
+    # surface one strong candidate from each available opportunity
+    # category before allowing one category to fill the remaining slots.
+    # This prevents a large cluster such as hackathons from hiding a
+    # different mechanism such as a grant.
+    max_recommendations = 6
+
+    recommendations: list[
+        dict[str, object]
+    ] = []
+
+    selected_rows: set[int] = set()
+    seen_categories: set[str] = set()
+
+    for row_index, row in enumerate(
+        ranked
+    ):
+        candidate = row[2]
+
+        category = str(
+            candidate.get(
+                "category",
+                "Opportunity",
+            )
+        )
+
+        if category in seen_categories:
+            continue
+
+        recommendations.append(
+            candidate
+        )
+
+        selected_rows.add(
+            row_index
+        )
+
+        seen_categories.add(
+            category
+        )
+
+        if (
+            len(recommendations)
+            >= max_recommendations
+        ):
+            break
+
+    if (
+        len(recommendations)
+        < max_recommendations
+    ):
+        for row_index, row in enumerate(
+            ranked
+        ):
+            if row_index in selected_rows:
+                continue
+
+            recommendations.append(
+                row[2]
+            )
+
+            if (
+                len(recommendations)
+                >= max_recommendations
+            ):
+                break
 
     effects: list[str] = []
 
